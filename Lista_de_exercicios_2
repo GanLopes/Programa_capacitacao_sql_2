@@ -1,0 +1,173 @@
+--Exercicio 1:
+SELECT *
+FROM T_SAK_DEPTO
+INNER JOIN T_SAK_FUNCIONARIO
+ON T_SAK_DEPTO.cd_depto = T_SAK_FUNCIONARIO.cd_depto;
+
+--Exercicio 2:
+SELECT *
+FROM T_SAK_DEPTO departamento
+LEFT JOIN T_SAK_FUNCIONARIO funcionario
+ON departamento.CD_DEPTO = funcionario.CD_DEPTO;
+
+--Exercicio 3:
+SELECT a.cd_depto "Código do Departamento",
+a.nm_depto "Nome do Departamento",
+b.cd_func "Código do Funcionário",
+b.nm_funcionario "Nome do Funcionário",
+b.dt_nascimento "Data de Nascimento",
+b.vl_salario "Salário", 
+b.ds_estado_civil "Estado Civil"
+
+FROM
+t_sak_funcionario b
+
+right join T_SAK_DEPTO a
+
+on
+
+a.cd_depto = b.cd_depto;
+--Exercicio 4:
+SELECT 
+    projeto.cd_projeto, 
+    funcionario.nm_funcionario, 
+    execucao.dt_entrada,
+    projeto.nm_projeto,
+    projeto.dt_inicio,
+    projeto.dt_termino,
+    execucao.cd_func,
+    execucao.dt_saida
+FROM 
+    T_SAK_PROJETO projeto
+INNER JOIN 
+    t_sak_execucao_proj execucao
+ON 
+    projeto.cd_projeto = execucao.cd_projeto 
+INNER JOIN 
+    t_sak_funcionario funcionario
+ON 
+    execucao.cd_func = funcionario.cd_func;
+
+--Exercicio 5:
+SELECT 
+    'Projeto ' || projeto.cd_projeto || ' - ' || projeto.nm_projeto ||
+    ' com data de início em ' || projeto.dt_inicio ||
+    ' e o valor do budget para esse projeto é de R$: ' || projeto.vl_budget_projeto
+FROM 
+    T_SAK_PROJETO projeto
+LEFT JOIN 
+    t_sak_execucao_proj execucao
+ON 
+    projeto.cd_projeto = execucao.cd_projeto
+LEFT JOIN 
+    t_sak_funcionario funcionario
+ON 
+    execucao.cd_func = funcionario.cd_func;
+
+--Exercicio 6:
+SELECT estado.cd_estado, estado.nm_estado, estado.sg_estado, cidade.nm_cidade
+
+FROM T_SAK_ESTADO ESTADO
+
+INNER JOIN T_SAK_CIDADE CIDADE
+
+ON estado.cd_estado=cidade.cd_estado 
+WHERE CD_cidade IN (184,236)
+
+--Exercicio 7:
+SELECT 
+    estado.cd_estado,
+    estado.nm_estado,
+    estado.sg_estado,
+    cidade.nm_cidade,
+    bairro.nm_bairro
+FROM 
+    T_SAK_ESTADO estado
+INNER JOIN 
+    T_SAK_CIDADE cidade
+ON 
+    estado.cd_estado = cidade.cd_estado
+INNER JOIN 
+    T_SAK_BAIRRO bairro
+ON 
+    cidade.cd_cidade = bairro.cd_cidade
+WHERE 
+    cidade.cd_cidade IN (184, 236)
+AND 
+    bairro.cd_bairro IN (186, 297);
+
+--Exercicio 8:
+SELECT
+    estado.cd_estado,
+    estado.nm_estado,
+    estado.sg_estado,
+    cidade.nm_cidade,
+    bairro.nm_bairro,
+    endereco.ds_logradouro,
+    endereco.nr_cep
+FROM
+    T_SAK_ESTADO estado
+INNER JOIN
+    T_SAK_CIDADE cidade
+ON
+    estado.cd_estado = cidade.cd_estado
+INNER JOIN
+    T_SAK_BAIRRO bairro
+ON
+    cidade.cd_cidade = bairro.cd_cidade
+INNER JOIN
+    T_SAK_ENDERECO endereco
+ON
+    bairro.cd_bairro = endereco.cd_bairro
+WHERE
+    cidade.cd_cidade IN (184, 236);
+
+--Exercicio 9:
+SELECT
+    E.DS_LOGRADOURO,
+    E.NR_CEP,
+    ES.NM_ESTADO,
+    ES.SG_ESTADO
+FROM
+    T_SAK_ENDERECO E
+INNER JOIN
+    T_SAK_CIDADE C ON E.CD_CIDADE = C.CD_CIDADE
+INNER JOIN
+    T_SAK_ESTADO ES ON C.CD_ESTADO = ES.CD_ESTADO
+WHERE
+    E.DS_LOGRADOURO = 'RUA DOS PRÍNCIPES' 
+    AND E.NR_CEP = '18603590';
+
+
+
+--Exercicio 10:
+SELECT
+    funcionario.CD_FUNC,
+    funcionario.NM_FUNCIONARIO,
+    departamento.NM_DEPTO,
+    departamento.DT_NASCIMENTO,
+    departamento.VL_SALARIO,
+    departamento.NM_TIPO_ENDERECO,
+    endereco.DS_LOGRADOURO,
+    endereco.NR_LOGRADOURO,
+    func_endereco.ds_complemento,
+    endereco.NM_BAIRRO,
+    endereco.NM_CIDADE,
+    endereco.NM_ESTADO,
+    endereco.SG_ESTADO,
+    endereco.NR_CEP
+FROM
+    t_sak_funcionario funcionario
+INNER JOIN
+    t_sak_depto departamento
+ON
+    funcionario.CD_FUNC = departamento.CD_DEPTO
+INNER JOIN
+    t_sak_funcionario_endereco func_endereco
+ON
+    funcionario.CD_FUNC = func_endereco.cd_func
+INNER JOIN
+    t_sak_endereco endereco
+ON
+    func_endereco.cd_end_func = endereco.CD_END_CORREIO;  
+
