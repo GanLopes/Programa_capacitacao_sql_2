@@ -11,12 +11,12 @@ LEFT JOIN T_SAK_FUNCIONARIO funcionario
 ON departamento.CD_DEPTO = funcionario.CD_DEPTO;
 
 --Exercicio 3:
-SELECT a.cd_depto "CÛdigo do Departamento",
+SELECT a.cd_depto "C√≥digo do Departamento",
 a.nm_depto "Nome do Departamento",
-b.cd_func "CÛdigo do Funcion·rio",
-b.nm_funcionario "Nome do Funcion·rio",
+b.cd_func "C√≥digo do Funcion√°rio",
+b.nm_funcionario "Nome do Funcion√°rio",
 b.dt_nascimento "Data de Nascimento",
-b.vl_salario "Sal·rio", 
+b.vl_salario "Sal√°rio", 
 b.ds_estado_civil "Estado Civil"
 
 FROM
@@ -50,9 +50,9 @@ ON
 
 --Exercicio 5:
 SELECT 
-    'Projeto ' || projeto.cd_projeto || ' - ' || projeto.nm_projeto ||
-    ' com data de inÌcio em ' || projeto.dt_inicio ||
-    ' e o valor do budget para esse projeto È de R$: ' || projeto.vl_budget_projeto
+    'Projeto ' || projeto.cd_projeto || ' / ' || projeto.nm_projeto ||
+    ' com data de in√≠cio em ' || projeto.dt_inicio ||
+    ' e o valor do budget para esse projeto √© de R$: ' || projeto.vl_budget_projeto
 FROM 
     T_SAK_PROJETO projeto
 LEFT JOIN 
@@ -125,49 +125,40 @@ WHERE
 --Exercicio 9:
 SELECT
     E.DS_LOGRADOURO,
-    E.NR_CEP,
+    B.NM_BAIRRO,
+    C.NM_CIDADE,
     ES.NM_ESTADO,
-    ES.SG_ESTADO
+    ES.SG_ESTADO,
+    E.NR_CEP
 FROM
     T_SAK_ENDERECO E
-INNER JOIN
-    T_SAK_CIDADE C ON E.CD_CIDADE = C.CD_CIDADE
-INNER JOIN
-    T_SAK_ESTADO ES ON C.CD_ESTADO = ES.CD_ESTADO
-WHERE
-    E.DS_LOGRADOURO = 'RUA DOS PRÕNCIPES' 
-    AND E.NR_CEP = '18603590';
-
-
+INNER JOIN T_SAK_BAIRRO B ON (E.CD_BAIRRO = B.CD_BAIRRO)
+INNER JOIN T_SAK_CIDADE C ON (B.CD_CIDADE = C.CD_CIDADE)
+INNER JOIN T_SAK_ESTADO ES ON (C.CD_ESTADO = ES.CD_ESTADO);
 
 --Exercicio 10:
 SELECT
-    funcionario.CD_FUNC,
-    funcionario.NM_FUNCIONARIO,
-    departamento.NM_DEPTO,
-    departamento.DT_NASCIMENTO,
-    departamento.VL_SALARIO,
-    departamento.NM_TIPO_ENDERECO,
-    endereco.DS_LOGRADOURO,
-    endereco.NR_LOGRADOURO,
-    func_endereco.ds_complemento,
-    endereco.NM_BAIRRO,
-    endereco.NM_CIDADE,
-    endereco.NM_ESTADO,
-    endereco.SG_ESTADO,
-    endereco.NR_CEP
+    F.CD_FUNC,
+    F.NM_FUNCIONARIO,
+    D.CD_DEPTO,
+    D.NM_DEPTO,
+    F.DT_NASCIMENTO,
+    F.VL_SALARIO,
+    TE.NM_TIPO_ENDERECO,
+    E.DS_LOGRADOURO,
+    FE.NR_LOGRADOURO,
+    FE.DS_COMPLEMENTO,
+    B.NM_BAIRRO,
+    C.NM_CIDADE,
+    ES.NM_ESTADO,
+    ES.SG_ESTADO,
+    E.NR_CEP
 FROM
-    t_sak_funcionario funcionario
-INNER JOIN
-    t_sak_depto departamento
-ON
-    funcionario.CD_FUNC = departamento.CD_DEPTO
-INNER JOIN
-    t_sak_funcionario_endereco func_endereco
-ON
-    funcionario.CD_FUNC = func_endereco.cd_func
-INNER JOIN
-    t_sak_endereco endereco
-ON
-    func_endereco.cd_end_func = endereco.CD_END_CORREIO;  
-
+    T_SAK_FUNCIONARIO F
+INNER JOIN T_SAK_DEPTO D ON (D.CD_DEPTO = F.CD_DEPTO)
+INNER JOIN T_SAK_FUNCIONARIO_ENDERECO FE ON (FE.CD_FUNC = F.CD_FUNC)
+INNER JOIN T_SAK_ENDERECO E ON (FE.CD_END_CORREIO = E.CD_END_CORREIO)
+INNER JOIN T_SAK_BAIRRO B ON (E.CD_BAIRRO = B.CD_BAIRRO)
+INNER JOIN T_SAK_CIDADE C ON (B.CD_CIDADE = C.CD_CIDADE)
+INNER JOIN T_SAK_ESTADO ES ON (C.CD_ESTADO = ES.CD_ESTADO)
+INNER JOIN T_SAK_TIPO_ENDERECO TE ON (TE.CD_TIPO_ENDERECO = FE.CD_TIPO_ENDERECO);
